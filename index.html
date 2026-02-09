@@ -3,181 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drago AI | Gemini</title>
+    <title>Drago AI | Secure Mode</title>
     <style>
-        :root {
-            --bg-color: #f8fafd;
-            --chat-bg: #ffffff;
-            --text-main: #1f1f1f;
-            --drago-bubble: #f0f4f9;
-            --user-bubble: #e1efff;
-            --accent: #1a73e8;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        header {
-            padding: 15px 20px;
-            background: white;
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: var(--accent);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #chat-box {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .msg {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 15px;
-            line-height: 1.5;
-            word-wrap: break-word;
-        }
-
-        .drago-msg {
-            align-self: flex-start;
-            background-color: var(--drago-bubble);
-            color: var(--text-main);
-            border-bottom-left-radius: 4px;
-        }
-
-        .user-msg {
-            align-self: flex-end;
-            background-color: var(--user-bubble);
-            color: #0b57d0;
-            border-bottom-right-radius: 4px;
-        }
-
-        .input-container {
-            padding: 15px;
-            background: white;
-            display: flex;
-            justify-content: center;
-        }
-
-        .input-wrapper {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            background: #f0f4f9;
-            border-radius: 25px;
-            padding: 5px 15px;
-            align-items: center;
-        }
-
-        input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 12px;
-            font-size: 16px;
-            outline: none;
-        }
-
-        button {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #1557b0;
-        }
-
-        /* Loading animation */
-        .typing { font-style: italic; color: #777; font-size: 13px; }
+        :root { --bg-color: #f8fafd; --chat-bg: #ffffff; --text-main: #1f1f1f; --accent: #1a73e8; }
+        body { margin: 0; font-family: sans-serif; background: var(--bg-color); display: flex; flex-direction: column; height: 100vh; }
+        header { padding: 15px; background: white; font-weight: bold; color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        #chat-box { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 80%; padding: 12px; border-radius: 15px; font-size: 15px; line-height: 1.4; }
+        .drago-msg { align-self: flex-start; background: #f0f4f9; border-bottom-left-radius: 4px; }
+        .user-msg { align-self: flex-end; background: #e1efff; color: #0b57d0; border-bottom-right-radius: 4px; }
+        .input-area { padding: 15px; background: white; display: flex; gap: 10px; border-top: 1px solid #eee; }
+        input { flex: 1; border: 1px solid #ddd; padding: 12px; border-radius: 25px; outline: none; }
+        button { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <header>
-        <span>🐲</span> Drago AI
-    </header>
+<header>🐲 Drago AI</header>
+<div id="chat-box">
+    <div class="msg drago-msg">Commander, ninte Secret API Key enter cheyyu! Ennaale enikku "Brain" activate aakkoo. 🧠</div>
+</div>
 
-    <div id="chat-box">
-        <div class="msg drago-msg">Parayu Commander, njan engane aanu ninnne ippo help cheyyendath? 🫡</div>
-    </div>
+<div class="input-area">
+    <input type="text" id="user-input" placeholder="Type here..." onkeypress="handleKey(event)">
+    <button onclick="sendChat()">Send</button>
+</div>
 
-    <div class="input-container">
-        <div class="input-wrapper">
-            <input type="text" id="user-input" placeholder="Message Drago..." onkeypress="handleKey(event)">
-            <button onclick="sendChat()">Send</button>
-        </div>
-    </div>
+<script>
+    let mySecretKey = ""; // Initially empty
 
-    <script>
-        const API_KEY = "AIzaSyABfmidWx4oIPP2RFdchqLyDz80mpXFo5s"; 
+    async function sendChat() {
+        const inputField = document.getElementById("user-input");
+        const chatBox = document.getElementById("chat-box");
+        const userText = inputField.value.trim();
 
-        async function sendChat() {
-            const inputField = document.getElementById("user-input");
-            const chatBox = document.getElementById("chat-box");
-            const userText = inputField.value.trim();
+        if (!userText) return;
 
-            if (!userText) return;
-
-            // Add User Message
-            chatBox.innerHTML += `<div class="msg user-msg">${userText}</div>`;
+        // Step 1: Set Key if not already set
+        if (!mySecretKey) {
+            mySecretKey = userText;
+            chatBox.innerHTML += `<div class="msg user-msg">Key Entered.</div>`;
+            chatBox.innerHTML += `<div class="msg drago-msg">Success! Njan ready aanu. Entho chodhicholoo. 🫡</div>`;
             inputField.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Drago thinking...
-            const typingDiv = document.createElement("div");
-            typingDiv.className = "msg drago-msg typing";
-            typingDiv.innerText = "Drago is thinking...";
-            chatBox.appendChild(typingDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ 
-                            parts: [{ text: `Act as Drago AI, a witty, supportive, and 'mass' AI assistant created by Commander Adam. Speak in a mix of Malayalam and English (Manglish style). Be authentic and a bit funny like a close friend. Question: ${userText}` }] 
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                const reply = data.candidates[0].content.parts[0].text;
-                
-                typingDiv.classList.remove("typing");
-                typingDiv.innerText = reply;
-            } catch (error) {
-                typingDiv.innerText = "Shedda, entho error vannallo! API onnu check cheyyu Commander.";
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
+            return;
         }
 
-        function handleKey(e) {
-            if (e.key === 'Enter') sendChat();
+        // Normal Chat
+        chatBox.innerHTML += `<div class="msg user-msg">${userText}</div>`;
+        inputField.value = "";
+        
+        const typingMsg = document.createElement("div");
+        typingMsg.className = "msg drago-msg";
+        typingMsg.innerText = "Drago is thinking...";
+        chatBox.appendChild(typingMsg);
+
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${mySecretKey}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: `Act as Drago AI, a witty friend created by Commander Adam. Use Manglish. Question: ${userText}` }] }]
+                })
+            });
+
+            const data = await response.json();
+            typingMsg.innerText = data.candidates[0].content.parts[0].text;
+        } catch (e) {
+            typingMsg.innerText = "Error! Key valid aano ennu check cheyyu.";
         }
-    </script>
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleKey(e) { if (e.key === 'Enter') sendChat(); }
+</script>
 </body>
 </html>
